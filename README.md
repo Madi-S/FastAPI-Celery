@@ -1,3 +1,5 @@
+# This is not my original code (I only enhanced it)
+
 # Asynchronous Tasks with FastAPI and Celery
 
 Example of how to handle background processes with FastAPI, Celery, and Docker.
