@@ -41,8 +41,4 @@ services:
     depends_on:
       - web
       - redis
-<<<<<<< HEAD
       - worker
-=======
-      - worker
->>>>>>> 2ecc122a28b50dc08ab318486c6de0c7c95757db
