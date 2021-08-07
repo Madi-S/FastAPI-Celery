@@ -1,45 +1,43 @@
-// custom javascript
-
-(function() {
-  console.log('Sanity Check!')
+;(function () {
+    console.log('Sanity Check!')
 })()
 
-function handleClick(type) {
-  fetch('/tasks', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ type: type }),
-  })
-  .then(response => response.json())
-  .then(data => getStatus(data.task_id))
+function handleClick(task_delay) {
+    fetch('/tasks', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ delay: task_delay })
+    })
+        .then(response => response.json())
+        .then(task => getStatus(task.id))
 }
 
 function getStatus(taskID) {
-  fetch(`/tasks/${taskID}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log(data)
-    const html = `
+    fetch(`/tasks/${taskID}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(task => {
+            console.log(task)
+            const html = `
       <tr>
         <td>${taskID}</td>
-        <td>${data.task_status}</td>
-        <td>${data.task_result}</td>
+        <td>${task.status}</td>
+        <td>${task.result}</td>
       </tr>`
-    const newRow = document.getElementById('tasks').insertRow(0)
-    newRow.innerHTML = html
+            const newRow = document.getElementById('tasks').insertRow(0)
+            newRow.innerHTML = html
 
-    const taskStatus = data.task_status
-    if (taskStatus === 'SUCCESS' || taskStatus === 'FAILURE') return false
-    setTimeout(function() {
-      getStatus(data.task_id)
-    }, 1000)
-  })
-  .catch(err => console.log(err))
+            if (task.status === 'SUCCESS' || task.status === 'FAILURE')
+                return false
+            setTimeout(function () {
+                getStatus(task.id)
+            }, 1000)
+        })
+        .catch(err => console.log(err))
 }

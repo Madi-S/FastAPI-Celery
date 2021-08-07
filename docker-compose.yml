@@ -15,7 +15,7 @@ services:
     build: ./project
     ports:
       - 8004:8000
-    command: alembic upgrade head && uvicorn main:app --host 0.0.0.0 --reload
+    command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --reload"
     volumes:
       - ./project:/usr/src/app
     environment:
@@ -26,8 +26,9 @@ services:
       - db
   
   pgadmin:
-    container_name: pgadmin
     image: dpage/pgadmin4
+    logging:
+        driver: none 
     environment:
       - PGADMIN_DEFAULT_EMAIL=pgadmin4@pgadmin.org
       - PGADMIN_DEFAULT_PASSWORD=admin
