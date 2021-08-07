@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi_sqlalchemy import DBSessionMiddleware
 
-from worker import sleep, add, test_task
+from worker import sleep
 from models import ModelUser, ModelTask
 from schema import SchemaUser, SchemaTask
 
@@ -50,10 +50,7 @@ def get_task_by_id(task_id):
 @app.post('/tasks', response_model=SchemaTask, status_code=201, tags=['tasks'])
 def post_tasks(payload=Body(...)):
     task = fire_sleep_task(payload)
-    add.delay(4, 4)
-    test_task.delay(4)
     db_task = ModelTask.create(id=task.id)
-    print('!!! Task created')
     return db_task
 
 
